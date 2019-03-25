@@ -11,7 +11,7 @@ class CustomQueueServiceProvider extends ServiceProvider
     {
         $this->publishes(
             [
-                __DIR__ . '/../config/externalqueue.php' => config_path('externalqueue.php')
+                __DIR__ . '/../config/customqueue.php' => config_path('customqueue.php')
             ]
         );
     }

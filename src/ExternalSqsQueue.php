@@ -22,7 +22,7 @@ class ExternalSqsQueue extends SqsQueue implements QueueContract
         );
 
         // Inject the job attribute into the payload. Required for Laravel
-        $response['Messages'][0]['job'] = config('externalqueue.handlers.custom-sqs');
+        $response['Messages'][0]['job'] = config('customqueue.handlers.custom-sqs');
 
         if ($response['Messages'] !== null && count($response['Messages']) > 0) {
             return new ExternalSqsJob(app(), $this->sqs, $response['Messages'][0], 'externalsqs', $queue);

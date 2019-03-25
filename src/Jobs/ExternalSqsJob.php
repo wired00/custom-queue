@@ -59,7 +59,7 @@ class ExternalSqsJob extends SqsJob implements JobContract
         $job = $this->getJobName();
 
         //Get the handler class name
-        $classname = config('externalqueue.handlers.' . $job, '');
+        $classname = config('customqueue.handlers.' . $job, '');
 
         if (!class_exists($classname) ||
             !in_array('Wired00\CustomQueue\Contracts\CustomQueueJobHandler', class_implements($classname))
