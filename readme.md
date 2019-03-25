@@ -114,16 +114,6 @@ use Illuminate\Queue\Jobs\Job;
 class ProcessSQS implements HandlerContract
 {
     /**
-     * Create a new job instance.
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        //
-    }
-
-    /**
      * Execute the job.
      *
      * @param Job $job
@@ -134,7 +124,7 @@ class ProcessSQS implements HandlerContract
     {
         // process
         // you can access job payload via $data
-				// $job->delete();
+		// $job->delete();
     }
 }
 
