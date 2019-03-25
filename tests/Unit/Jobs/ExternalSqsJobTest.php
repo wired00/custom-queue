@@ -1,21 +1,21 @@
 <?php
 
-use Aws\Common\Credentials\Credentials;
-use Aws\Common\Signature\SignatureV4;
-use Guzzle\Common\Collection;
+use Aws\Credentials\Credentials;
+use Aws\Signature\SignatureV4;
+use Illuminate\Support\Collection;
+use PHPUnit\Framework\TestCase;
 use Wired00\CustomQueue\Jobs\ExternalSqsJob;
-
 
 /**
  * Help functions for the test
  */
 
-function config()
-{
-    return 'TestJob';
-}
+//function config()
+//{
+//    return 'TestJob';
+//}
 
-class ExternalSqsJobTest extends PHPUnit_Framework_TestCase
+class ExternalSqsJobTest extends TestCase
 {
     public function tearDown()
     {
@@ -38,11 +38,10 @@ class ExternalSqsJobTest extends PHPUnit_Framework_TestCase
         // This is how the modified getQueue builds the queueUrl
         $this->queueUrl = $this->baseUrl . '/' . $this->account . '/' . $this->queueName;
         // Get a mock of the SqsClient
-        $this->mockedSqsClient = $this->getMock(
-            'Aws\Sqs\SqsClient',
-            array('deleteMessage'),
-            array($this->credentials, $this->signature, $this->config)
-        );
+        $this->mockedSqsClient = \Mockery::mock(Aws\Sqs\SqsClient::class);
+        $this->mockedSqsClient
+            ->shouldReceive('deleteMessage')
+            ->andReturn($this->credentials, $this->signature, $this->config);
         // Use Mockery to mock the IoC Container
         $this->mockedContainer = Mockery::mock('Illuminate\Container\Container');
         $this->mockedJob = 'foo';
@@ -81,14 +80,20 @@ class ExternalSqsJobTest extends PHPUnit_Framework_TestCase
     {
         //Arrange
         $testJob = \Mockery::mock('overload:TestJob', '\Wired00\CustomQueue\Contracts\CustomQueueJobHandler');
-        $testJob->shouldReceive('handle')->once()->with(\Mockery::any(), $this->mockedData);
+        $testJob
+            ->shouldReceive('handle')
+            ->once()
+            ->with(\Mockery::any(), $this->mockedData);
+
+        var_dump($this->queueUrl);
 
         //Act
         $job = new ExternalSqsJob(
             $this->mockedContainer,
             $this->mockedSqsClient,
-            $this->queueUrl,
-            $this->mockedJobData
+            $this->mockedJobData,
+            'externalsqs,',
+            $this->queueUrl
         );
 
         $job->fire();

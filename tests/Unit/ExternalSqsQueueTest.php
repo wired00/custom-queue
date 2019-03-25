@@ -1,8 +1,9 @@
 <?php
 
-use Guzzle\Service\Resource\Model;
+//use Guzzle\Service\Resource\Model;
+use PHPUnit\Framework\TestCase;
 
-class ExternalSqsQueueTest extends PHPUnit_Framework_TestCase
+class ExternalSqsQueueTest extends TestCase
 {
     public function tearDown()
     {
@@ -25,16 +26,16 @@ class ExternalSqsQueueTest extends PHPUnit_Framework_TestCase
         $this->mockedDelay = 10;
         $this->mockedMessageId = 'e3cd03ee-59a3-4ad8-b0aa-ee2e3808ac81';
         $this->mockedReceiptHandle = '0NNAq8PwvXuWv5gMtS9DJ8qEdyiUwbAjpp45w2m6M4SJ1Y+PxCh7R930NRB8ylSacEmoSnW18bgd4nK\/O6ctE+VFVul4eD23mA07vVoSnPI4F\/voI1eNCp6Iax0ktGmhlNVzBwaZHEr91BRtqTRM3QKd2ASF8u+IQaSwyl\/DGK+P1+dqUOodvOVtExJwdyDLy1glZVgm85Yw9Jf5yZEEErqRwzYz\/qSigdvW4sm2l7e4phRol\/+IjMtovOyH\/ukueYdlVbQ4OshQLENhUKe7RNN5i6bE\/e5x9bnPhfj2gbM';
-        $this->mockedSendMessageResponseModel = new Model(
+        $this->mockedSendMessageResponseModel =
             array(
                 'Body' => $this->mockedPayload,
                 'MD5OfBody' => md5($this->mockedPayload),
                 'ReceiptHandle' => $this->mockedReceiptHandle,
                 'MessageId' => $this->mockedMessageId,
                 'Attributes' => array('ApproximateReceiveCount' => 1)
-            )
+
         );
-        $this->mockedReceiveMessageResponseModel = new Model(
+        $this->mockedReceiveMessageResponseModel =
             array(
                 'Messages' => array(
                     0 => array(
@@ -44,17 +45,16 @@ class ExternalSqsQueueTest extends PHPUnit_Framework_TestCase
                         'MessageId' => $this->mockedMessageId
                     )
                 )
-            )
+
         );
     }
 
     public function testPopProperlyPopsJobOffOfSqs()
     {
-        $queue = $this->getMock(
-            'Wired00\CustomQueue\ExternalSqsQueue',
-            array('getQueue'),
-            array($this->sqs, $this->queueName, $this->account)
-        );
+        $queue = \Mockery::mock(Wired00\CustomQueue\ExternalSqsQueue::class);
+        $queue
+            ->shouldreceive('getQueue')
+            ->andReturn($this->sqs, $this->queueName, $this->account);
         $queue->setContainer(Mockery::mock('Illuminate\Container\Container'));
         $queue->expects($this->once())->method('getQueue')->with($this->queueName)->will(
             $this->returnValue($this->queueUrl)
@@ -78,7 +78,7 @@ class ExternalSqsQueueTest extends PHPUnit_Framework_TestCase
     public function testPopProperlyPopsJobOfEmptyQueue()
     {
         // Overwrite the number of messages
-        $this->mockedReceiveMessageResponseModel = new Model(array('Messages' => []));
+        $this->mockedReceiveMessageResponseModel = array('Messages' => []);
 
         $queue = $this->getMock(
             'Wired00\CustomQueue\ExternalSqsQueue',
