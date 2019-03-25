@@ -1,11 +1,9 @@
 <?php
 
-use Wired00\CustomQueue\Jobs\ExternalSqsJob;
-use Illuminate\Queue\Jobs\Job;
-use Aws\Sqs\SqsClient;
-use Guzzle\Common\Collection;
-use Aws\Common\Signature\SignatureV4;
 use Aws\Common\Credentials\Credentials;
+use Aws\Common\Signature\SignatureV4;
+use Guzzle\Common\Collection;
+use Wired00\CustomQueue\Jobs\ExternalSqsJob;
 
 
 /**
@@ -82,7 +80,7 @@ class ExternalSqsJobTest extends PHPUnit_Framework_TestCase
     public function testSpawnJob()
     {
         //Arrange
-        $testJob = \Mockery::mock('overload:TestJob', '\Wired00\CustomQueue\Contracts\ExternalQueueJobHandler');
+        $testJob = \Mockery::mock('overload:TestJob', '\Wired00\CustomQueue\Contracts\CustomQueueJobHandler');
         $testJob->shouldReceive('handle')->once()->with(\Mockery::any(), $this->mockedData);
 
         //Act

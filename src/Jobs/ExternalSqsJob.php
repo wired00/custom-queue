@@ -52,7 +52,7 @@ class ExternalSqsJob extends SqsJob implements JobContract
 
     /**
      * Spawns a new handler for the specific job
-     * @return Wired00\CustomQueue\Contracts\ExternalQueueJobHandler The handler for this this job
+     * @return Wired00\CustomQueue\Contracts\CustomQueueJobHandler The handler for this this job
      */
     protected function resolveHandler()
     {
@@ -63,7 +63,7 @@ class ExternalSqsJob extends SqsJob implements JobContract
         $classname = config('externalqueue.handlers.' . $job, '');
 
         if (!class_exists($classname) ||
-            !in_array('Wired00\CustomQueue\Contracts\ExternalQueueJobHandler', class_implements($classname))
+            !in_array('Wired00\CustomQueue\Contracts\CustomQueueJobHandler', class_implements($classname))
         ) {
             throw new \UnexpectedValueException('The handler class for ' . $job . ' was not found');
         }

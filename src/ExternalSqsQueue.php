@@ -2,9 +2,9 @@
 
 namespace Wired00\CustomQueue;
 
+use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\SqsQueue;
 use Wired00\CustomQueue\Jobs\ExternalSqsJob;
-use Illuminate\Contracts\Queue\Queue as QueueContract;
 
 class ExternalSqsQueue extends SqsQueue implements QueueContract
 {

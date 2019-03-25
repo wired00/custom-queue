@@ -4,7 +4,7 @@ namespace Wired00\CustomQueue\Contracts;
 
 use Illuminate\Queue\Jobs\Job;
 
-interface ExternalQueueJobHandler
+interface CustomQueueJobHandler
 {
     /**
      * Triggered by the worker in order to process the job

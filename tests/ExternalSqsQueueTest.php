@@ -1,7 +1,6 @@
 <?php
 
 use Guzzle\Service\Resource\Model;
-use Aws\Sqs\SqsClient;
 
 class ExternalSqsQueueTest extends PHPUnit_Framework_TestCase
 {

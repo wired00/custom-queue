@@ -2,10 +2,10 @@
 
 namespace Wired00\CustomQueue\Connectors;
 
-use Illuminate\Queue\Connectors\ConnectorInterface;
-use Wired00\CustomQueue\ExternalSqsQueue;
 use Aws\Sqs\SqsClient;
+use Illuminate\Queue\Connectors\ConnectorInterface;
 use Illuminate\Support\Arr;
+use Wired00\CustomQueue\ExternalSqsQueue;
 
 
 class ExternalSqsConnector implements ConnectorInterface
