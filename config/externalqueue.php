@@ -4,16 +4,14 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | External Queue Handlers
+    | Queue Handlers
     |--------------------------------------------------------------------------
     |
-    | Here you may specify the handlers used by the different commands for
-    | the external queues.
-    | You need to declare the whole namespace.
+    | Specify the handlers used by the different commands for external queues.
     |
     */
 
     'handlers' => [
-        // 'eis-sqs' => App\Jobs\ProcessSQS::class
+        // 'custom-sqs' => App\Jobs\ProcessSQS::class
     ]
 ];

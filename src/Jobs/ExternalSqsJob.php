@@ -9,7 +9,6 @@ class ExternalSqsJob extends SqsJob implements JobContract
 {
     public function __construct($container, $sqs, array $job, $connectionName, $queue)
     {
-//        info(' externalSqsJob $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
         parent::__construct($container, $sqs, $this->addJobHandlerToBody($job), $connectionName, $queue);
     }
 
@@ -17,7 +16,7 @@ class ExternalSqsJob extends SqsJob implements JobContract
     {
         $newBody = [
             "type" => "job",
-            "job" => "eis-sqs",
+            "job" => "custom-sqs",
             "data" => $job['Body']
         ];
 
