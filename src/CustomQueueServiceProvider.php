@@ -5,7 +5,7 @@ namespace Wired00\CustomQueue;
 use Illuminate\Support\ServiceProvider;
 use Wired00\CustomQueue\Connectors\ExternalSqsConnector;
 
-class ExternalQueueServiceProvider extends ServiceProvider
+class CustomQueueServiceProvider extends ServiceProvider
 {
     public function boot()
     {
