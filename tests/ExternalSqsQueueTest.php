@@ -12,7 +12,7 @@ class ExternalSqsQueueTest extends PHPUnit_Framework_TestCase
     public function setUp()
     {
         // Use Mockery to mock the SqsClient
-        $this->sqs = Mockery::mock('Aws\Sqs\SqsClient'); 
+        $this->sqs = Mockery::mock('Aws\Sqs\SqsClient');
         $this->account = '1234567891011';
         $this->queueName = 'emails';
         $this->baseUrl = 'https://sqs.someregion.amazonaws.com';
