@@ -2,9 +2,60 @@
 
 Laravel queues work well internally when items are both pushed (`SomeJob::dispatch()`) and then fetched via Laravel queue workers. 
 
-But if jobs are pushed to a queue from some other external service with a custom (non Laravel) payload. For example, AWS S3 bucket > SNS > SQS?
+But what if jobs are pushed to a queue from some other external service with a custom (non Laravel) payload. For example, AWS S3 bucket > SNS > SQS? In those cases, Laravel dies with an error stating that the job payload does not contain an attribute `job`.
 
-This package aims to solve that issue. It will fetch a job,  modify the payload to a format which Laravel and then process via a specified job handler.
+This package aims to solve that issue. It will fetch a job,  modify the payload to a format which Laravel recognises and then process via a specified job handler.
+
+Payload without custom-queue:
+```  
+  {
+  "Records": [
+    {
+      "eventVersion": "2.1",
+      "eventSource": "aws:s3",
+      "awsRegion": "ap-southeast-2",
+      "eventTime": "2019-03-22T06:31:40.395Z",
+      "eventName": "ObjectCreated:Put",
+      "userIdentity": {
+        "principalId": "AWS:blahblah:blah"
+      },
+      "requestParameters": {
+        "sourceIPAddress": "10.10.10.10"
+      },
+      "responseElements": {
+        "x-amz-request-id": "C53F65ECD63F53F8",
+        "x-amz-id-2": "blah="
+      },
+      "s3": {
+        "s3SchemaVersion": "1.0",
+        "configurationId": "folder-name",
+        "bucket": {
+          "name": "bucket-name",
+          "ownerIdentity": {
+            "principalId": "A2XHNNJ3IERBDC"
+          },
+          "arn": "arn:aws:s3:::bucket-name"
+        },
+        "object": {
+          "key": "file-drop/droptest.csv",
+          "size": 12,
+          "eTag": "tagid",
+          "sequencer": "005C94814C54E35D75"
+        }
+      }
+    }
+  ]
+}
+```
+
+Payload with custom-queue:
+```  
+{
+  "type": "job",
+  "job": "custom-sqs",
+  "data": "{\"Records\":[{\"eventVersion\":\"2.1\",\"eventSource\":\"aws:s3\",\"awsRegion\":\"ap-southeast-2\",\"eventTime\":\"2019-03-22T06:31:40.395Z\",\"eventName\":\"ObjectCreated:Put\",\"userIdentity\":{\"principalId\":\"AWS:blahblah:blah\"},\"requestParameters\":{\"sourceIPAddress\":\"10.10.10.10\"},\"responseElements\":{\"x-amz-request-id\":\"C53F65ECD63F53F8\",\"x-amz-id-2\":\"blah=\"},\"s3\":{\"s3SchemaVersion\":\"1.0\",\"configurationId\":\"folder-name\",\"bucket\":{\"name\":\"bucket-name\",\"ownerIdentity\":{\"principalId\":\"A2XHNNJ3IERBDC\"},\"arn\":\"arn:aws:s3:::bucket-name\"},\"object\":{\"key\":\"file-drop/droptest.csv\",\"size\":12,\"eTag\":\"tagid\",\"sequencer\":\"005C94814C54E35D75\"}}}]}"
+}
+```
 
 ## Installation
 
@@ -32,6 +83,7 @@ Set all these values from your `.env`. I.e:
 ```
 AWS_ACCESS_KEY_ID=ASIAWMC25A2L7MDO6NGA
 AWS_SECRET_ACCESS_KEY=3qZLVRShxQvx2xbTSKD5bllObtwHNH3O/9NqvFNc
+AWS_SECURITY_TOKEN=YOUR-AWS-SECURITY-TOKEN
 SQS_QUEUE=https://sqs.ap-southeast-2.amazonaws.com/123/your-sqs-queue-name
 AWS_DEFAULT_REGION=ap-southeast-2
 QUEUE_CONNECTION=externalsqs
