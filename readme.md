@@ -140,9 +140,8 @@ class ProcessSQS implements HandlerContract
 
 ```
 
-### Origin
-This is an enhancement to the unmaintained Laravel External Queue package (kristianedlund/laravel-external-queue)
-
 ### License
+This is built upon the unmaintained, and non-functional, Laravel External Queue package (kristianedlund/laravel-external-queue)
 
+It is of MIT license do what you want with it. All care no responsibility.
 [MIT license](http://opensource.org/licenses/MIT).
