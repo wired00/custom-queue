@@ -24,5 +24,14 @@
             "Wired00\\CustomQueue\\": "src/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Wired00\\CustomQueue\\CustomQueueServiceProvider"
+            ],
+            "dont-discover": [
+            ]
+        }
+    },
     "minimum-stability": "dev"
 }

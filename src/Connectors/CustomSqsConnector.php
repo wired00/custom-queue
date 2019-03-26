@@ -5,10 +5,10 @@ namespace Wired00\CustomQueue\Connectors;
 use Aws\Sqs\SqsClient;
 use Illuminate\Queue\Connectors\ConnectorInterface;
 use Illuminate\Support\Arr;
-use Wired00\CustomQueue\ExternalSqsQueue;
+use Wired00\CustomQueue\CustomSqsQueue;
 
 
-class ExternalSqsConnector implements ConnectorInterface
+class CustomSqsConnector implements ConnectorInterface
 {
     /**
      * Establish a queue connection.
@@ -26,7 +26,7 @@ class ExternalSqsConnector implements ConnectorInterface
 
         $sqs = SqsClient::factory($config1);
 
-        return new ExternalSqsQueue($sqs, $config['queue']);
+        return new CustomSqsQueue($sqs, $config['queue']);
     }
 
     /**
