@@ -55,7 +55,6 @@ class CustomSqsJob extends SqsJob implements JobContract
      */
     protected function resolveHandler()
     {
-
         $job = $this->getJobName();
 
         //Get the handler class name
