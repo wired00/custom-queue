@@ -1,10 +1,10 @@
 # Laravel Custom Queues
 
-Laravel queues work well internally when items are both pushed (`SomeJob::dispatch()`) and then fetched via Laravel queue workers. 
+Laravel queues work great internally when jobs are both pushed (`SomeJob::dispatch()`) and then fetched via Laravel queue workers.
 
-But what if jobs are pushed to a queue from some other external service with a custom (non Laravel) payload. For example, AWS S3 bucket > SNS > SQS? In those cases, Laravel dies with an error stating that the job payload does not contain an attribute `job`.
+But what if jobs are pushed to a queue from an external service or message broker other than Laravel? For example, AWS S3 bucket > SNS > SQS? In those cases, Laravel queue workers do not recognise the payload, cannot parse it and break because the job payload is missing the expected `job` and `data` attributes etc.
 
-This package aims to solve that issue. It will fetch a job,  modify the payload to a format which Laravel recognises and then process via a specified job handler.
+`CustomQueue` aims to solve this issue. It will fetch a job,  re-packages the payload to a format which Laravel recognises and then process via a user specified job handler.
 
 Payload without custom-queue:
 ```  
@@ -56,17 +56,27 @@ Payload with custom-queue:
   "data": "{\"Records\":[{\"eventVersion\":\"2.1\",\"eventSource\":\"aws:s3\",\"awsRegion\":\"ap-southeast-2\",\"eventTime\":\"2019-03-22T06:31:40.395Z\",\"eventName\":\"ObjectCreated:Put\",\"userIdentity\":{\"principalId\":\"AWS:blahblah:blah\"},\"requestParameters\":{\"sourceIPAddress\":\"10.10.10.10\"},\"responseElements\":{\"x-amz-request-id\":\"C53F65ECD63F53F8\",\"x-amz-id-2\":\"blah=\"},\"s3\":{\"s3SchemaVersion\":\"1.0\",\"configurationId\":\"folder-name\",\"bucket\":{\"name\":\"bucket-name\",\"ownerIdentity\":{\"principalId\":\"A2XHNNJ3IERBDC\"},\"arn\":\"arn:aws:s3:::bucket-name\"},\"object\":{\"key\":\"file-drop/droptest.csv\",\"size\":12,\"eTag\":\"tagid\",\"sequencer\":\"005C94814C54E35D75\"}}}]}"
 }
 ```
+**Note: ** `job: custom-sqs` is designating a job handler to be used to process the job. `data` is simply the original payload.
 
 ## Installation
 
-todo
+Install package via composer
+```
+composer require wired00/custom-queue
+```
+
+Publish the `CustomQueue` config file into your project
+```
+vendor:publish
+```
+See details on configuring `customqueue.php` below
 
 ## Usage
 
 ### Configuration
 
 #### queue.php
-Setup a custom external sqs connection
+Setup a custom external SQS connection
 
 ```
         'custom-sqs' => [
@@ -78,7 +88,7 @@ Setup a custom external sqs connection
         ],
 ```
 
-Set all these values from your `.env`. I.e: 
+Set all these values from your Laravel `.env`. I.e: 
 
 ```
 AWS_ACCESS_KEY_ID=ASIAWMC25A2L7MDO6NGA
@@ -90,15 +100,15 @@ QUEUE_CONNECTION=custom-sqs
 ```
 
 #### customqueue.php
-customqueue.php config file simply contains a map between handler class path and an identifier. 
+`customqueue.php` config file simply contains a mapping between handler class path and an identifier.
 
-The example contains identifier `custom-sqs` and class path `App\Jobs\ProcessSQS::class`. This will mean that the job payload when fetched from a queue will be appended with a key-value of `job: App\Jobs\ProcessSQS::class` whenever a connection type of `custom-sqs` is processed.
+The example contains identifier `custom-sqs` and class path `App\Jobs\ProcessSQS::class`. This specifies that the job payload when fetched from a queue will be appended with a key-value of `job: App\Jobs\ProcessSQS::class` whenever a connection type of `custom-sqs` is processed. The job will then process via  `ProcessSQS->handle()`. 
 
-Currently CustomQueue only supports custom SQS fetching but in future it might support RabbitMQ and Redis. In those cases customqueue.php would include indentifiers such as `custom-redis` and `custom-rabbitmq`.
+Currently CustomQueue only supports custom SQS fetching but in future it might support RabbitMQ and Redis. In those cases `customqueue.php` would include identifiers such as `custom-redis` and `custom-rabbitmq`.
 
 ### Handler files
 
-Handler files are those references via their class path within `customqueue.php`. They must implement `Wired00\CustomQueue\Contracts\CustomQueueJobHandler`.
+Handler files are those referenced via the class path within `customqueue.php`. They must implement `Wired00\CustomQueue\Contracts\CustomQueueJobHandler`.
 
 A common namespace for these are `App\Jobs`.
 
@@ -129,6 +139,7 @@ class ProcessSQS implements HandlerContract
 }
 
 ```
+**Note:** `handle()` accepts the current job and importantly `$data` which contains the job payload popped from the SQS queue for example.
 
 ### License
 This is built upon the unmaintained, and non-functional, Laravel External Queue package (kristianedlund/laravel-external-queue)
