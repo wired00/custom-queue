@@ -5,7 +5,7 @@ namespace Wired00\CustomQueue\Jobs;
 use Illuminate\Contracts\Queue\Job as JobContract;
 use Illuminate\Queue\Jobs\SqsJob;
 
-class ExternalSqsJob extends SqsJob implements JobContract
+class CustomSqsJob extends SqsJob implements JobContract
 {
     public function __construct($container, $sqs, array $job, $connectionName, $queue)
     {
@@ -55,7 +55,6 @@ class ExternalSqsJob extends SqsJob implements JobContract
      */
     protected function resolveHandler()
     {
-
         $job = $this->getJobName();
 
         //Get the handler class name

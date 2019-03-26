@@ -3,7 +3,7 @@
 namespace Wired00\CustomQueue;
 
 use Illuminate\Support\ServiceProvider;
-use Wired00\CustomQueue\Connectors\ExternalSqsConnector;
+use Wired00\CustomQueue\Connectors\CustomSqsConnector;
 
 class CustomQueueServiceProvider extends ServiceProvider
 {
@@ -30,9 +30,9 @@ class CustomQueueServiceProvider extends ServiceProvider
                  */
                 $manager = $this->app['queue'];
                 $manager->addConnector(
-                    'externalsqs',
+                    'custom-sqs',
                     function () {
-                        return new ExternalSqsConnector;
+                        return new CustomSqsConnector;
                     }
                 );
             }

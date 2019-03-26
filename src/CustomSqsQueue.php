@@ -4,9 +4,9 @@ namespace Wired00\CustomQueue;
 
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\SqsQueue;
-use Wired00\CustomQueue\Jobs\ExternalSqsJob;
+use Wired00\CustomQueue\Jobs\CustomSqsJob;
 
-class ExternalSqsQueue extends SqsQueue implements QueueContract
+class CustomSqsQueue extends SqsQueue implements QueueContract
 {
     /**
      * Pop the next job off of the queue.
@@ -25,7 +25,7 @@ class ExternalSqsQueue extends SqsQueue implements QueueContract
         $response['Messages'][0]['job'] = config('customqueue.handlers.custom-sqs');
 
         if ($response['Messages'] !== null && count($response['Messages']) > 0) {
-            return new ExternalSqsJob(app(), $this->sqs, $response['Messages'][0], 'externalsqs', $queue);
+            return new CustomSqsJob(app(), $this->sqs, $response['Messages'][0], 'custom-sqs', $queue);
         }
     }
 }
