@@ -3,7 +3,7 @@
 //use Guzzle\Service\Resource\Model;
 use PHPUnit\Framework\TestCase;
 
-class ExternalSqsQueueTest extends TestCase
+class CustomSqsQueueTest extends TestCase
 {
     public function tearDown()
     {
@@ -51,7 +51,7 @@ class ExternalSqsQueueTest extends TestCase
 
     public function testPopProperlyPopsJobOffOfSqs()
     {
-        $queue = \Mockery::mock(Wired00\CustomQueue\ExternalSqsQueue::class);
+        $queue = \Mockery::mock(Wired00\CustomQueue\CustomSqsQueue::class);
         $queue
             ->shouldreceive('getQueue')
             ->andReturn($this->sqs, $this->queueName, $this->account);

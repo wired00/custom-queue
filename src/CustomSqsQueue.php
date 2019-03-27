@@ -2,6 +2,7 @@
 
 namespace Wired00\CustomQueue;
 
+use Aws\Sqs\SqsClient;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\SqsQueue;
 use Wired00\CustomQueue\Jobs\CustomSqsJob;
@@ -16,6 +17,8 @@ class CustomSqsQueue extends SqsQueue implements QueueContract
      */
     public function pop($queue = null)
     {
+        $jobHandlerFactory = resolve('Wired00\CustomQueue\Factories\JobHandlerFactory');
+
         $queue = $this->getQueue($queue);
         $response = $this->sqs->receiveMessage(
             array('QueueUrl' => $queue, 'AttributeNames' => array('ApproximateReceiveCount'))
@@ -25,7 +28,7 @@ class CustomSqsQueue extends SqsQueue implements QueueContract
         $response['Messages'][0]['job'] = config('customqueue.handlers.custom-sqs');
 
         if ($response['Messages'] !== null && count($response['Messages']) > 0) {
-            return new CustomSqsJob(app(), $this->sqs, $response['Messages'][0], 'custom-sqs', $queue);
+            return new CustomSqsJob(app(), $this->sqs, $response['Messages'][0], 'custom-sqs', $queue, $jobHandlerFactory);
         }
     }
 }

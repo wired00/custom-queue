@@ -4,11 +4,27 @@ namespace Wired00\CustomQueue\Jobs;
 
 use Illuminate\Contracts\Queue\Job as JobContract;
 use Illuminate\Queue\Jobs\SqsJob;
+use Wired00\CustomQueue\Contracts\CustomQueueJobHandler;
+use Wired00\CustomQueue\Factories\JobHandlerFactory;
 
 class CustomSqsJob extends SqsJob implements JobContract
 {
-    public function __construct($container, $sqs, array $job, $connectionName, $queue)
+    /** @var JobHandlerFactory */
+    protected $jobHandlerFactory;
+
+    /**
+     * CustomSqsJob constructor.
+     * @param $container
+     * @param \Aws\Sqs\SqsClient $sqs
+     * @param array $job
+     * @param $connectionName
+     * @param $queue
+     * @param $jobHandlerFactory
+     */
+    public function __construct($container, $sqs, array $job, $connectionName, $queue, $jobHandlerFactory)
     {
+        info('CustomSqsJob__construct');
+        $this->jobHandlerFactory = $jobHandlerFactory;
         parent::__construct($container, $sqs, $this->addJobHandlerToBody($job), $connectionName, $queue);
     }
 
@@ -34,7 +50,6 @@ class CustomSqsJob extends SqsJob implements JobContract
     {
         $handler = $this->resolveHandler();
         $data = $this->getJobData();
-
         $handler->handle($this, $data);
     }
 
@@ -44,40 +59,25 @@ class CustomSqsJob extends SqsJob implements JobContract
      */
     protected function getJobData()
     {
-        $rawdata = $this->decodePayload();
-
-        return $rawdata['data'];
+        return $this->decodePayload()['data'];
     }
 
     /**
      * Spawns a new handler for the specific job
-     * @return Wired00\CustomQueue\Contracts\CustomQueueJobHandler The handler for this this job
+     * @return CustomQueueJobHandler The handler for this this job
      */
     protected function resolveHandler()
     {
-        $job = $this->getJobName();
-
-        //Get the handler class name
-        $classname = config('customqueue.handlers.' . $job, '');
-
-        if (!class_exists($classname) ||
-            !in_array('Wired00\CustomQueue\Contracts\CustomQueueJobHandler', class_implements($classname))
-        ) {
-            throw new \UnexpectedValueException('The handler class for ' . $job . ' was not found');
-        }
-
-        return new $classname;
+        return $this->jobHandlerFactory->create($this->getJobIdentifier());
     }
 
     /**
      * Get the job name
      * @return string The job name
      */
-    protected function getJobName()
+    protected function getJobIdentifier()
     {
-        $rawdata = $this->decodePayload();
-
-        return $rawdata['job'];
+        return $this->decodePayload()['job'];
     }
 
     /**

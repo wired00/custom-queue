@@ -4,6 +4,7 @@ namespace Wired00\CustomQueue;
 
 use Illuminate\Support\ServiceProvider;
 use Wired00\CustomQueue\Connectors\CustomSqsConnector;
+use Wired00\CustomQueue\Factories\JobHandlerFactory;
 
 class CustomQueueServiceProvider extends ServiceProvider
 {
