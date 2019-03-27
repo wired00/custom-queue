@@ -2,10 +2,10 @@
 
 namespace Tests\Unit\Jobs;
 
-use Tests\Jobs\ProcessSQS;
 use Aws\Sqs\SqsClient;
 use Illuminate\Container\Container;
 use Orchestra\Testbench\TestCase as TestCase;
+use Tests\Jobs\Handlers\ProcessSQS;
 use Wired00\CustomQueue\Factories\JobHandlerFactory;
 use Wired00\CustomQueue\Jobs\CustomSqsJob;
 
@@ -59,7 +59,7 @@ class CustomSqsJobTest extends TestCase
     protected function getEnvironmentSetUp($app)
     {
         // Setup default database to use sqlite :memory:
-        $app['config']->set('customqueue.handlers.custom-sqs', \App\Jobs\ProcessSQS::class);
+        $app['config']->set('customqueue.handlers.custom-sqs', ProcessSQS::class);
     }
 
     public function testJobHandlerCalled()
