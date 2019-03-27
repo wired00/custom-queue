@@ -23,7 +23,6 @@ class CustomSqsJob extends SqsJob implements JobContract
      */
     public function __construct($container, $sqs, array $job, $connectionName, $queue, $jobHandlerFactory)
     {
-        info('CustomSqsJob__construct');
         $this->jobHandlerFactory = $jobHandlerFactory;
         parent::__construct($container, $sqs, $this->addJobHandlerToBody($job), $connectionName, $queue);
     }
