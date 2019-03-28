@@ -2,7 +2,6 @@
 
 namespace Wired00\CustomQueue;
 
-use Aws\Sqs\SqsClient;
 use Illuminate\Contracts\Queue\Queue as QueueContract;
 use Illuminate\Queue\SqsQueue;
 use Wired00\CustomQueue\Jobs\CustomSqsJob;
@@ -12,7 +11,8 @@ class CustomSqsQueue extends SqsQueue implements QueueContract
     /**
      * Pop the next job off of the queue.
      *
-     * @param  string $queue
+     * @param string $queue
+     *
      * @return \Illuminate\Contracts\Queue\Job|null
      */
     public function pop($queue = null)
@@ -21,7 +21,7 @@ class CustomSqsQueue extends SqsQueue implements QueueContract
 
         $queue = $this->getQueue($queue);
         $response = $this->sqs->receiveMessage(
-            array('QueueUrl' => $queue, 'AttributeNames' => array('ApproximateReceiveCount'))
+            ['QueueUrl' => $queue, 'AttributeNames' => ['ApproximateReceiveCount']]
         );
 
         // Inject the job attribute into the payload. Required for Laravel
