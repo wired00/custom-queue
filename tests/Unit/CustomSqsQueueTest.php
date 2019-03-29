@@ -34,7 +34,7 @@ class CustomSqsQueueTest extends TestCase
                 'MessageId'     => $this->mockedMessageId,
                 'Attributes'    => ['ApproximateReceiveCount' => 1],
 
-        ];
+            ];
         $this->mockedReceiveMessageResponseModel =
             [
                 'Messages' => [
@@ -46,7 +46,7 @@ class CustomSqsQueueTest extends TestCase
                     ],
                 ],
 
-        ];
+            ];
     }
 
     public function testPopProperlyPopsJobOffOfSqs()

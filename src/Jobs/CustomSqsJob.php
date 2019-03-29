@@ -17,7 +17,7 @@ class CustomSqsJob extends SqsJob implements JobContract
      *
      * @param $container
      * @param \Aws\Sqs\SqsClient $sqs
-     * @param array              $job
+     * @param array $job
      * @param $connectionName
      * @param $queue
      * @param $jobHandlerFactory

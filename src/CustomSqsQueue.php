@@ -28,7 +28,14 @@ class CustomSqsQueue extends SqsQueue implements QueueContract
         $response['Messages'][0]['job'] = config('customqueue.handlers.custom-sqs');
 
         if ($response['Messages'] !== null && count($response['Messages']) > 0) {
-            return new CustomSqsJob(app(), $this->sqs, $response['Messages'][0], 'custom-sqs', $queue, $jobHandlerFactory);
+            return new CustomSqsJob(
+                app(),
+                $this->sqs,
+                $response['Messages'][0],
+                'custom-sqs',
+                $queue,
+                $jobHandlerFactory
+            );
         }
     }
 }
