@@ -24,10 +24,11 @@ class CustomSqsQueue extends SqsQueue implements QueueContract
             ['QueueUrl' => $queue, 'AttributeNames' => ['ApproximateReceiveCount']]
         );
 
-        // Inject the job attribute into the payload. Required for Laravel
-        $response['Messages'][0]['job'] = config('customqueue.handlers.custom-sqs');
-
         if ($response['Messages'] !== null && count($response['Messages']) > 0) {
+
+            // Inject the job attribute into the payload. Required for Laravel
+            $response['Messages'][0]['job'] = config('customqueue.handlers.custom-sqs');
+
             return new CustomSqsJob(
                 app(),
                 $this->sqs,

@@ -11,6 +11,19 @@ use Wired00\CustomQueue\Factories\JobHandlerFactory;
 
 class CustomSqsJobTest extends TestCase
 {
+    /**
+     * Define environment setup.
+     *
+     * @param \Illuminate\Foundation\Application $app
+     *
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        // Setup default database to use sqlite :memory:
+        $app['config']->set('customqueue.handlers.custom-sqs', ProcessSQS::class);
+    }
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -48,19 +61,6 @@ class CustomSqsJobTest extends TestCase
         $this->mockedJobHandlerFactory
             ->shouldReceive('create')
             ->andReturn($this->mockedJobHandler);
-    }
-
-    /**
-     * Define environment setup.
-     *
-     * @param \Illuminate\Foundation\Application $app
-     *
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        // Setup default database to use sqlite :memory:
-        $app['config']->set('customqueue.handlers.custom-sqs', ProcessSQS::class);
     }
 
     public function testJobHandlerCalled()
