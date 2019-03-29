@@ -1,0 +1,15 @@
+preset: laravel
+
+enabled:
+  - alpha_ordered_imports
+
+disabled:
+  - length_ordered_imports
+  - align_phpdoc
+  - unary_operator_spaces
+
+finder:
+  exclude:
+    - "node_modules"
+    - "storage"
+    - "vendor"

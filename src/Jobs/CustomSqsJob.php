@@ -2,10 +2,10 @@
 
 namespace Wired00\CustomQueue\Jobs;
 
-use Illuminate\Contracts\Queue\Job as JobContract;
 use Illuminate\Queue\Jobs\SqsJob;
-use Wired00\CustomQueue\Contracts\CustomQueueJobHandler;
+use Illuminate\Contracts\Queue\Job as JobContract;
 use Wired00\CustomQueue\Factories\JobHandlerFactory;
+use Wired00\CustomQueue\Contracts\CustomQueueJobHandler;
 
 class CustomSqsJob extends SqsJob implements JobContract
 {
@@ -14,6 +14,7 @@ class CustomSqsJob extends SqsJob implements JobContract
 
     /**
      * CustomSqsJob constructor.
+     *
      * @param $container
      * @param \Aws\Sqs\SqsClient $sqs
      * @param array $job
@@ -30,9 +31,9 @@ class CustomSqsJob extends SqsJob implements JobContract
     private function addJobHandlerToBody(array $job)
     {
         $newBody = [
-            "type" => "job",
-            "job" => "custom-sqs",
-            "data" => $job['Body']
+            'type' => 'job',
+            'job'  => 'custom-sqs',
+            'data' => $job['Body'],
         ];
 
         $job['Body'] = json_encode($newBody);
@@ -53,8 +54,9 @@ class CustomSqsJob extends SqsJob implements JobContract
     }
 
     /**
-     * Extract the payload data from the queue message
-     * @return Array The payload data
+     * Extract the payload data from the queue message.
+     *
+     * @return array The payload data
      */
     protected function getJobData()
     {
@@ -62,7 +64,8 @@ class CustomSqsJob extends SqsJob implements JobContract
     }
 
     /**
-     * Spawns a new handler for the specific job
+     * Spawns a new handler for the specific job.
+     *
      * @return CustomQueueJobHandler The handler for this this job
      */
     protected function resolveHandler()
@@ -71,7 +74,8 @@ class CustomSqsJob extends SqsJob implements JobContract
     }
 
     /**
-     * Get the job name
+     * Get the job name.
+     *
      * @return string The job name
      */
     protected function getJobIdentifier()
@@ -80,8 +84,9 @@ class CustomSqsJob extends SqsJob implements JobContract
     }
 
     /**
-     * Decode the payload data in the message
-     * @return Array The decoded data
+     * Decode the payload data in the message.
+     *
+     * @return array The decoded data
      */
     protected function decodePayload()
     {

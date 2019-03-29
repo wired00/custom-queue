@@ -13,5 +13,5 @@ return [
 
     'handlers' => [
         // 'custom-sqs' => App\Jobs\ProcessSQS::class
-    ]
+    ],
 ];
