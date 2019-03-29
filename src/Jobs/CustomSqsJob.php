@@ -2,10 +2,10 @@
 
 namespace Wired00\CustomQueue\Jobs;
 
-use Illuminate\Contracts\Queue\Job as JobContract;
 use Illuminate\Queue\Jobs\SqsJob;
-use Wired00\CustomQueue\Contracts\CustomQueueJobHandler;
+use Illuminate\Contracts\Queue\Job as JobContract;
 use Wired00\CustomQueue\Factories\JobHandlerFactory;
+use Wired00\CustomQueue\Contracts\CustomQueueJobHandler;
 
 class CustomSqsJob extends SqsJob implements JobContract
 {
