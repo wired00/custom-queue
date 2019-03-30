@@ -3,9 +3,9 @@
 namespace Wired00\CustomQueue\Connectors;
 
 use Aws\Sqs\SqsClient;
+use Illuminate\Queue\Connectors\ConnectorInterface;
 use Illuminate\Support\Arr;
 use Wired00\CustomQueue\CustomSqsQueue;
-use Illuminate\Queue\Connectors\ConnectorInterface;
 
 class CustomSqsConnector implements ConnectorInterface
 {
