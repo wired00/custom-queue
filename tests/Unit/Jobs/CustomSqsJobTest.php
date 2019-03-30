@@ -4,10 +4,10 @@ namespace Tests\Unit\Jobs;
 
 use Aws\Sqs\SqsClient;
 use Illuminate\Container\Container;
-use Tests\Jobs\Handlers\ProcessSQS;
-use Wired00\CustomQueue\Jobs\CustomSqsJob;
 use Orchestra\Testbench\TestCase as TestCase;
+use Tests\Jobs\Handlers\ProcessSQS;
 use Wired00\CustomQueue\Factories\JobHandlerFactory;
+use Wired00\CustomQueue\Jobs\CustomSqsJob;
 
 class CustomSqsJobTest extends TestCase
 {
