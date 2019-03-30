@@ -132,14 +132,18 @@ class ProcessSQS implements HandlerContract
      */
     public function handle(Job $job, $data = null)
     {
-        // process
-        // you can access job payload via $data
-		// $job->delete();
+        // process code (you can access job payload via $data)
+		    // $job->delete();
     }
 }
 
 ```
-**Note:** `handle()` accepts the current job and importantly `$data` which contains the job payload popped from the SQS queue for example.
+
+
+**Note:**
+- `handle()` accepts the current job and importantly `$data` which contains the job payload popped from the SQS queue for example.  
+
+- `$job->delete();` might be needed depending on how the queue handles things. In my case, `SQS` did not seem to auto remove jobs after they were fetched. So `delete()` was required to remove the job after handling.
 
 ### License
 This is built upon the unmaintained, and non-functional, Laravel External Queue package (kristianedlund/laravel-external-queue)

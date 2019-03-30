@@ -11,7 +11,7 @@ class CustomQueueServiceProvider extends ServiceProvider
     {
         $this->publishes(
             [
-                __DIR__ . '/../config/customqueue.php' => config_path('customqueue.php')
+                __DIR__.'/../config/customqueue.php' => config_path('customqueue.php'),
             ]
         );
     }
@@ -26,17 +26,16 @@ class CustomQueueServiceProvider extends ServiceProvider
         $this->app->booted(
             function () {
                 /**
-                 * @var \Illuminate\Queue\QueueManager $manager
+                 * @var \Illuminate\Queue\QueueManager
                  */
                 $manager = $this->app['queue'];
                 $manager->addConnector(
                     'custom-sqs',
                     function () {
-                        return new CustomSqsConnector;
+                        return new CustomSqsConnector();
                     }
                 );
             }
         );
-
     }
 }
