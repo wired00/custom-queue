@@ -47,7 +47,7 @@ class CustomSqsQueueTest extends TestCase
     }
 
     /**
-     * When job popped from SQS Queue, it should be job of correct type
+     * When job popped from SQS Queue, it should be job of correct type.
      *
      * @test
      */
@@ -85,7 +85,7 @@ class CustomSqsQueueTest extends TestCase
     }
 
     /**
-     * Should handle popped job when SQS Queue is empty
+     * Should handle popped job when SQS Queue is empty.
      *
      * @test
      */
