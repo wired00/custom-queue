@@ -84,7 +84,7 @@ Setup a custom external SQS connection
             'key' => env('AWS_ACCESS_KEY_ID', 'your-public-key'),
             'secret' => env('AWS_SECRET_ACCESS_KEY', 'your-secret-key'),
             'queue' => env('SQS_QUEUE', 'your-queue-url'),
-            'region' => env('AWS_DEFAULT_REGION', 'us-east-1'),
+            'region' => env('AWS_REGION', 'us-east-1'),
         ],
 ```
 
@@ -95,7 +95,7 @@ AWS_ACCESS_KEY_ID=ASIAWMC25A2L7MDO6NGA
 AWS_SECRET_ACCESS_KEY=3qZLVRShxQvx2xbTSKD5bllObtwHNH3O/9NqvFNc
 AWS_SECURITY_TOKEN=YOUR-AWS-SECURITY-TOKEN
 SQS_QUEUE=https://sqs.ap-southeast-2.amazonaws.com/123/your-sqs-queue-name
-AWS_DEFAULT_REGION=ap-southeast-2
+AWS_REGION=ap-southeast-2
 QUEUE_CONNECTION=custom-sqs
 ```
 
