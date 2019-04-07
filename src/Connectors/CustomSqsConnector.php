@@ -18,13 +18,13 @@ class CustomSqsConnector implements ConnectorInterface
      */
     public function connect(array $config)
     {
-        $config1 = $this->getDefaultConfiguration($config);
+        $config = $this->getDefaultConfiguration($config);
 
-        if ($config1['key'] && $config1['secret']) {
-            $config1['credentials'] = Arr::only($config1, ['key', 'secret', 'token']);
+        if ($config['key'] && $config['secret']) {
+            $config['credentials'] = Arr::only($config, ['key', 'secret', 'token']);
         }
 
-        $sqs = SqsClient::factory($config1);
+        $sqs = SqsClient::factory($config);
 
         return new CustomSqsQueue($sqs, $config['queue']);
     }
